@@ -1,0 +1,61 @@
+@model Event
+@{
+    ViewData["Title"] = "Event Details";
+    var isRegistered = ViewBag.IsRegistered as bool? ?? false;
+}
+
+<div class="row g-4">
+    <div class="col-lg-8">
+        <div class="card shadow-sm border-0">
+            <div class="card-body p-4">
+                <div class="event-meta mb-2">@Model.EventDate.ToLocalTime().ToString("dddd, dd MMMM yyyy - hh:mm tt")</div>
+                <h1 class="mb-3">@Model.Title</h1>
+                <p class="text-muted">@Model.Description</p>
+                <hr />
+                <div class="row g-3">
+                    <div class="col-sm-6">
+                        <div class="detail-label">Capacity</div>
+                        <div>@Model.Capacity students</div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="detail-label">Registered</div>
+                        <div>@Model.Registrations.Count students</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="card shadow-sm border-0">
+            <div class="card-body p-4">
+                <h2 class="h4">Registration</h2>
+                @if (User.IsInRole("Student"))
+                {
+                    if (isRegistered)
+                    {
+                        <div class="alert alert-info mb-0">You have already registered for this event.</div>
+                    }
+                    else if (Model.Registrations.Count >= Model.Capacity)
+                    {
+                        <div class="alert alert-warning mb-0">This event is currently full.</div>
+                    }
+                    else
+                    {
+                        <form asp-action="Register" asp-route-id="@Model.Id" method="post">
+                            <button type="submit" class="btn btn-accent w-100">Register for Event</button>
+                        </form>
+                    }
+                }
+                else if (User.IsInRole("Admin"))
+                {
+                    <div class="alert alert-secondary mb-0">Admins can manage this event from the admin dashboard.</div>
+                }
+                else
+                {
+                    <p class="text-muted">Login to register for this event.</p>
+                    <a asp-controller="Account" asp-action="Login" class="btn btn-outline-primary w-100">Login</a>
+                }
+            </div>
+        </div>
+    </div>
+</div>

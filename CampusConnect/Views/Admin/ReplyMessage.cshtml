@@ -1,0 +1,48 @@
+@model AdminReplyMessageViewModel
+@{
+    ViewData["Title"] = "Reply to Message";
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card shadow-sm border-0">
+            <div class="card-body p-4">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <h1 class="h3 mb-1">Reply to Message</h1>
+                        <p class="text-muted mb-0">@Model.StudentName • @Model.StudentEmail</p>
+                    </div>
+                    <a asp-action="ViewMessages" class="btn btn-outline-secondary">Back</a>
+                </div>
+
+                <div class="mb-4">
+                    <div class="fw-semibold mb-2">Student Message</div>
+                    <div class="event-meta mb-2">@Model.SentAt.ToLocalTime().ToString("dd MMM yyyy, hh:mm tt")</div>
+                    <div class="p-3 rounded bg-light">@Model.Content</div>
+                </div>
+
+                <form asp-action="ReplyMessage" method="post">
+                    <input asp-for="Id" type="hidden" />
+                    <input asp-for="StudentName" type="hidden" />
+                    <input asp-for="StudentEmail" type="hidden" />
+                    <input asp-for="Content" type="hidden" />
+                    <input asp-for="SentAt" type="hidden" />
+                    <input asp-for="ExistingReply" type="hidden" />
+
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                    <div class="mb-3">
+                        <label asp-for="ReplyContent" class="form-label"></label>
+                        <textarea asp-for="ReplyContent" rows="6" class="form-control"></textarea>
+                        <span asp-validation-for="ReplyContent" class="text-danger"></span>
+                    </div>
+
+                    <button type="submit" class="btn btn-accent">Send Reply</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

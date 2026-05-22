@@ -1,0 +1,24 @@
+@model EventFormViewModel
+@{
+    ViewData["Title"] = "Edit Event";
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card shadow-sm border-0">
+            <div class="card-body p-4">
+                <h1 class="h3 mb-4">Edit Event</h1>
+                <form asp-action="EditEvent" method="post">
+                    <input asp-for="Id" type="hidden" />
+                    <partial name="_EventForm" model="Model" />
+                    <button type="submit" class="btn btn-accent">Update Event</button>
+                    <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

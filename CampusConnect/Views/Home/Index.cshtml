@@ -1,0 +1,127 @@
+@model DashboardViewModel
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<section class="hero-panel mb-5">
+    <div class="row align-items-center g-4">
+        <div class="col-lg-7">
+            @if (User.Identity?.IsAuthenticated == true)
+            {
+                <span class="hero-chip mb-3">@(Model.IsAdmin ? "Admin Dashboard" : "Student Dashboard")</span>
+                <h1 class="display-5 fw-bold">Welcome back, @Model.FullName</h1>
+                <p class="lead hero-copy">
+                    @(Model.IsAdmin
+                        ? "Monitor platform activity, manage campus events, and review student communication from one place."
+                        : "Track campus activities, manage your event registrations, and reach support when needed.")
+                </p>
+                <div class="hero-actions">
+                    @if (Model.IsAdmin)
+                    {
+                        <a class="btn btn-accent btn-lg" asp-controller="Admin" asp-action="Index">Open Admin Dashboard</a>
+                        <a class="btn btn-ghost btn-lg" asp-controller="Admin" asp-action="ViewRegistrations">View Registrations</a>
+                    }
+                    else
+                    {
+                        <a class="btn btn-accent btn-lg" asp-controller="Event" asp-action="Index">Explore Events</a>
+                        <a class="btn btn-ghost btn-lg" asp-controller="Registration" asp-action="MyRegistrations">My Activity</a>
+                    }
+                </div>
+            }
+            else
+            {
+                <span class="hero-chip mb-3">Campus Community Platform</span>
+                <h1 class="display-5 fw-bold">Connect students with the events and services that matter.</h1>
+                <p class="lead hero-copy">Create an account to register for events, monitor your participation, and contact support directly.</p>
+                <div class="hero-actions">
+                    <a class="btn btn-accent btn-lg" asp-controller="Account" asp-action="Register">Get Started</a>
+                    <a class="btn btn-ghost btn-lg" asp-controller="Event" asp-action="Index">Browse Events</a>
+                </div>
+            }
+        </div>
+        <div class="col-lg-5">
+            <div class="stats-grid stats-grid-hero">
+                <div class="stat-card">
+                    <span class="stat-label">@(Model.IsAdmin ? "Total Events" : "Upcoming Events")</span>
+                    <strong>@(Model.IsAdmin ? Model.TotalEventsCount : Model.UpcomingEventsCount)</strong>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-label">@(Model.IsAdmin ? "Total Registrations" : "My Registrations")</span>
+                    <strong>@Model.RegistrationCount</strong>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-label">@(Model.IsAdmin ? "Total Messages" : "Messages Sent")</span>
+                    <strong>@Model.MessageCount</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section-panel mt-4">
+    <div class="section-header mb-4">
+        <div>
+            <div class="section-kicker">Campus Updates</div>
+            <h2 class="h3 mb-1">Latest Announcements</h2>
+            <p class="section-copy mb-0">Stay informed about important updates shared by the admin team.</p>
+        </div>
+        <a asp-controller="Announcements" asp-action="Index" class="btn btn-outline-primary">View All Announcements</a>
+    </div>
+
+    @if (!Model.LatestAnnouncements.Any())
+    {
+        <div class="card border-0 shadow-sm">
+            <div class="card-body py-4 text-muted text-center">No announcements have been posted yet.</div>
+        </div>
+    }
+    else
+    {
+        <div class="row g-4">
+            @foreach (var announcement in Model.LatestAnnouncements)
+            {
+                <div class="col-md-6 col-xl-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body">
+                            <div class="small text-muted mb-2">@announcement.CreatedAt.ToLocalTime().ToString("dd MMM yyyy, hh:mm tt")</div>
+                            <h3 class="h5">@announcement.Title</h3>
+                            <p class="text-muted mb-0">@announcement.Content</p>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</section>
+
+<section class="section-panel">
+    <div class="section-header mb-4">
+        <div>
+            <div class="section-kicker">@(Model.IsAdmin ? "Platform Overview" : "What's happening")</div>
+            <h2 class="h3 mb-1">@(Model.IsAdmin ? "Upcoming Events to Manage" : "Upcoming Events")</h2>
+            <p class="section-copy mb-0">
+                @(Model.IsAdmin
+                    ? "Review the next scheduled events and keep campus activity running smoothly."
+                    : "Discover featured activities designed to help students connect, learn, and participate.")
+            </p>
+        </div>
+        <a asp-controller="Event" asp-action="Index" class="btn btn-outline-primary">View All Events</a>
+    </div>
+    <div class="row g-4">
+        @foreach (var item in Model.UpcomingEvents)
+        {
+            <div class="col-md-6 col-xl-3">
+                <div class="card h-100 event-card border-0">
+                    <div class="event-card-topbar"></div>
+                    <div class="card-body">
+                        <div class="small event-date-pill mb-3">@item.EventDate.ToLocalTime().ToString("dd MMM yyyy, hh:mm tt")</div>
+                        <h3 class="h5">@item.Title</h3>
+                        <p class="text-muted mb-4">@item.Description</p>
+                    </div>
+                    <div class="card-footer bg-transparent border-0 pt-0 pb-4 px-4">
+                        <a asp-controller="Event" asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary">View Details</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</section>

@@ -1,0 +1,48 @@
+@model IEnumerable<Announcement>
+@{
+    ViewData["Title"] = "Announcements";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="mb-1">Announcements</h1>
+        <p class="text-muted mb-0">Latest updates from the CampusConnect admin team.</p>
+    </div>
+    @if (User.IsInRole("Admin"))
+    {
+        <a asp-action="Create" class="btn btn-primary">Create Announcement</a>
+    }
+</div>
+
+@if (!Model.Any())
+{
+    <div class="card border-0 shadow-sm">
+        <div class="card-body py-4 text-center text-muted">
+            No announcements available.
+        </div>
+    </div>
+}
+else
+{
+    <div class="row g-4">
+        @foreach (var item in Model)
+        {
+            <div class="col-md-6">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body">
+                        <div class="small text-muted mb-2">@item.CreatedAt.ToLocalTime().ToString("dd MMM yyyy, hh:mm tt")</div>
+                        <h2 class="h5">@item.Title</h2>
+                        <p class="mb-0 text-muted">@item.Content</p>
+                    </div>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <div class="card-footer bg-transparent border-0 pt-0 pb-3 px-3 d-flex gap-2">
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary">Edit</a>
+                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger">Delete</a>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+}

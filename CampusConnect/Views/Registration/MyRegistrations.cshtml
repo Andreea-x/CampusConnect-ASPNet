@@ -1,0 +1,54 @@
+@model IEnumerable<Registration>
+@{
+    ViewData["Title"] = "My Registrations";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="mb-1">My Registrations</h1>
+        <p class="text-muted mb-0">Review the events you have joined.</p>
+    </div>
+    <a asp-controller="Event" asp-action="Index" class="btn btn-outline-primary">Explore More Events</a>
+</div>
+
+<div class="card shadow-sm border-0">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-light">
+            <tr>
+                <th>Event</th>
+                <th>Event Date</th>
+                <th>Registered On</th>
+                <th class="text-end">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            @if (!Model.Any())
+            {
+                <tr>
+                    <td colspan="4" class="text-center py-4 text-muted">You have not registered for any events yet.</td>
+                </tr>
+            }
+            else
+            {
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.Event?.Title</td>
+                        <td>@item.Event?.EventDate.ToLocalTime().ToString("dd MMM yyyy, hh:mm tt")</td>
+                        <td>@item.RegistrationDate.ToLocalTime().ToString("dd MMM yyyy, hh:mm tt")</td>
+                        <td class="text-end">
+                            <form asp-action="Unregister" method="post" class="d-inline"
+                                  onsubmit="return confirm('Are you sure you want to unregister from this event?');">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@item.Id" />
+                                <button type="submit" class="btn btn-sm btn-outline-danger">Unregister</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            }
+            </tbody>
+        </table>
+    </div>
+</div>

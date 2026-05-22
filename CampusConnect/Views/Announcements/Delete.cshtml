@@ -1,0 +1,36 @@
+@model Announcement
+@{
+    ViewData["Title"] = "Delete Announcement";
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body p-4">
+                <h1 class="h3 text-danger mb-3">Delete Announcement</h1>
+                <p class="mb-4">Are you sure you want to delete this announcement?</p>
+
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Title</label>
+                    <div>@Model.Title</div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Content</label>
+                    <div class="text-muted">@Model.Content</div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label fw-semibold">Created At</label>
+                    <div>@Model.CreatedAt.ToLocalTime().ToString("dd MMM yyyy, hh:mm tt")</div>
+                </div>
+
+                <form asp-action="Delete" method="post" class="d-flex gap-2">
+                    <input type="hidden" asp-for="Id" />
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                    <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
