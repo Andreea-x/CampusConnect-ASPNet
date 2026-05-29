@@ -33,5 +33,13 @@ https://github.com/aviviscan326-cloud/CampusConnect-ASPNet
 3. Restore NuGet packages
 4. Run the application
 
+## Installation
+
+- Install .NET 8 SDK
+- Clone the repository
+- Open the project in Rider or Visual Studio
+- Restore dependencies
+- Run the application
+
 ## Author
 Andreea Mariuta Viviscan
