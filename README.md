@@ -23,8 +23,14 @@ CampusConnect is an ASP.NET Core web application designed to help students and a
 - SQLite
 - Razor Views
 
-### GitHub Repository
-https://github.com/aviviscan326-cloud/CampusConnect-ASPNet
+## Project Structure
+
+- Controllers - Application controllers
+- Models - Data models
+- Views - Razor views
+- Data - Database context and initialization
+- wwwroot - Static files and assets
+
 
 ## How to Run
 
