@@ -41,5 +41,13 @@ https://github.com/aviviscan326-cloud/CampusConnect-ASPNet
 - Restore dependencies
 - Run the application
 
+## Future Improvements
+
+- Email notifications
+- Mobile responsive enhancements
+- Event calendar integration
+- User profile customization
+
+
 ## Author
 Andreea Mariuta Viviscan
